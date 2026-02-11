@@ -12,6 +12,9 @@ import { VolunteerSystem } from './components/VolunteerSystem';
 import { GonovoteGuide } from './components/GonovoteGuide';
 import { PrivacyPolicy } from './components/PrivacyPolicy';
 import { JoinJamaat } from './components/JoinJamaat';
+import { CentralLeaders } from './components/CentralLeaders';
+import { LOGOS } from './constants';
+import { UserPlus, ArrowRight, ShieldCheck } from 'lucide-react';
 
 type Tab = 'home' | 'frame' | 'ai' | 'results' | 'volunteers' | 'guide' | 'privacy' | 'join';
 
@@ -25,7 +28,48 @@ const App: React.FC = () => {
       <main className="flex-grow pt-20">
         {activeTab === 'home' && (
           <div className="animate-in fade-in duration-700">
-            <Hero onGetStarted={() => setActiveTab('frame')} />
+            <Hero 
+              onGetStarted={() => setActiveTab('frame')} 
+              onJoinClick={() => setActiveTab('join')}
+            />
+            
+            {/* Massive Call to Action for Joining */}
+            <section className="relative overflow-hidden py-24 bg-white">
+              <div className="container mx-auto px-4">
+                <div className="bg-gradient-to-br from-green-900 to-emerald-950 rounded-[60px] p-8 md:p-20 text-white shadow-2xl relative">
+                  <div className="absolute top-0 right-0 w-96 h-96 bg-green-400/10 rounded-full -mr-48 -mt-48 blur-3xl"></div>
+                  <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-12">
+                    <div className="max-w-2xl text-center lg:text-left">
+                      <div className="inline-flex items-center gap-3 px-4 py-2 bg-white/10 rounded-full text-green-400 font-bold text-sm mb-6 uppercase tracking-widest">
+                        <ShieldCheck size={18} /> সৎ নেতৃত্বের কাফেলা
+                      </div>
+                      <h2 className="text-4xl md:text-6xl font-black mb-6 leading-tight">
+                        বাগেরহাটের উন্নয়নে <br /> আপনিও শরিক হোন!
+                      </h2>
+                      <p className="text-xl text-green-100/70 mb-10 leading-relaxed font-medium">
+                        সৎ নেতৃত্ব এবং ইনসাফ কায়েমের লক্ষ্যে আমরা সকলে আজ একতাবদ্ধ। মোরেলগঞ্জ ও শরণখোলার মাটি ও মানুষের অধিকার আদায়ের লড়াইয়ে আপনার অংশগ্রহণ আমাদের শক্তিকে বেগবান করবে।
+                      </p>
+                      <button 
+                        onClick={() => setActiveTab('join')}
+                        className="bg-white text-green-900 px-12 py-6 rounded-3xl font-black text-2xl hover:scale-105 transition-all shadow-2xl flex items-center justify-center gap-4 group mx-auto lg:mx-0"
+                      >
+                        <UserPlus size={28} className="text-green-600" /> সদস্য ফরম পূরণ করুন
+                        <ArrowRight className="group-hover:translate-x-2 transition-transform" />
+                      </button>
+                    </div>
+                    <div className="shrink-0">
+                      <div className="w-64 h-64 md:w-80 md:h-80 bg-white/5 backdrop-blur-3xl rounded-[40px] border border-white/10 flex items-center justify-center p-8 relative">
+                         <img src={LOGOS.PARTY} alt="Big Logo" className="w-full h-full object-contain animate-pulse" />
+                         <div className="absolute -bottom-4 -right-4 bg-green-600 px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl">
+                            Join Now
+                         </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
             <div className="container mx-auto px-4 py-12">
                <CandidateProfile />
             </div>
@@ -98,6 +142,9 @@ const App: React.FC = () => {
             <PrivacyPolicy />
           </div>
         )}
+
+        {/* Global Central Leaders Section - Shown on all pages above Footer */}
+        <CentralLeaders />
       </main>
 
       <Footer onPrivacyClick={() => setActiveTab('privacy')} />

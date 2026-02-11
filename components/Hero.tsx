@@ -1,10 +1,10 @@
 
 import React from 'react';
 import { CANDIDATE, ALIM_IMAGES, LOGOS } from '../constants';
-import { ArrowRight, Star } from 'lucide-react';
+import { ArrowRight, UserPlus } from 'lucide-react';
 import { CountdownTimer } from './CountdownTimer';
 
-export const Hero: React.FC<{ onGetStarted: () => void }> = ({ onGetStarted }) => {
+export const Hero: React.FC<{ onGetStarted: () => void, onJoinClick: () => void }> = ({ onGetStarted, onJoinClick }) => {
   return (
     <section className="relative min-h-[95vh] flex items-center bg-[#004d3b] overflow-hidden pt-10">
       {/* Background Decorative Elements */}
@@ -31,20 +31,26 @@ export const Hero: React.FC<{ onGetStarted: () => void }> = ({ onGetStarted }) =
               <span className="text-white font-black border-b-8 border-red-600 pb-1">{CANDIDATE.name}</span>
             </p>
 
-            <div className="max-w-md mx-auto lg:mx-0 py-8">
+            <div className="max-w-md mx-auto lg:mx-0 py-8 space-y-6">
               <CountdownTimer />
+              <button 
+                onClick={onJoinClick}
+                className="w-full bg-gradient-to-r from-yellow-400 to-yellow-600 text-green-950 py-5 rounded-3xl font-black text-xl shadow-2xl hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-3 animate-bounce"
+              >
+                <UserPlus size={24} /> এখনই সদস্য হোন
+              </button>
             </div>
 
             <div className="flex flex-wrap justify-center lg:justify-start gap-6">
               <button 
                 onClick={onGetStarted}
-                className="bg-white text-green-900 px-12 py-6 rounded-3xl font-black shadow-2xl hover:bg-green-50 transition-all hover:scale-105 active:scale-95 flex items-center gap-4 text-xl group"
+                className="bg-white text-green-900 px-10 py-5 rounded-3xl font-black shadow-2xl hover:bg-green-50 transition-all hover:scale-105 active:scale-95 flex items-center gap-4 text-lg group"
               >
                 নিজের এভাটার তৈরি করুন
                 <ArrowRight className="group-hover:translate-x-2 transition-transform" />
               </button>
-              <button className="bg-transparent border-2 border-white/30 text-white px-12 py-6 rounded-3xl font-black hover:bg-white/10 transition-all backdrop-blur-sm text-xl flex items-center gap-3">
-                <img src={LOGOS.SCALE} alt="Logo" className="w-8 h-8 invert brightness-0" /> প্রচারণা
+              <button className="bg-transparent border-2 border-white/30 text-white px-10 py-5 rounded-3xl font-black hover:bg-white/10 transition-all backdrop-blur-sm text-lg flex items-center gap-3">
+                <img src={LOGOS.PARTY} alt="Party Logo" className="w-8 h-8" /> প্রচারণা
               </button>
             </div>
           </div>
@@ -67,9 +73,9 @@ export const Hero: React.FC<{ onGetStarted: () => void }> = ({ onGetStarted }) =
                     দাঁড়িপাল্লা <img src={LOGOS.SCALE} alt="Logo" className="w-10 h-10 object-contain invert brightness-0" />
                   </div>
                 </div>
-                <div className="absolute -top-6 -right-6 bg-white text-green-800 p-5 rounded-3xl shadow-xl font-black border-2 border-green-50">
-                  <Star className="text-yellow-400 mb-2" fill="currentColor" />
-                  <div className="text-sm leading-tight text-center">বাংলাদেশ জামায়াতে ইসলামী<br/>মনোনীত</div>
+                <div className="absolute -top-6 -right-6 bg-white text-green-800 p-5 rounded-3xl shadow-xl font-black border-2 border-green-50 flex flex-col items-center">
+                  <img src={LOGOS.PARTY} alt="Logo" className="w-10 h-10 mb-2 object-contain" />
+                  <div className="text-[11px] leading-tight text-center uppercase tracking-tighter">বাংলাদেশ জামায়াতে ইসলামী<br/>মনোনীত</div>
                 </div>
               </div>
             </div>

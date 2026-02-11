@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { DEVELOPER, CANDIDATE } from '../constants';
+import { DEVELOPER, CANDIDATE, LOGOS } from '../constants';
 import { Phone, Mail, Globe, Facebook, MapPin } from 'lucide-react';
 
 interface FooterProps {
@@ -12,9 +12,15 @@ export const Footer: React.FC<FooterProps> = ({ onPrivacyClick }) => {
     <footer className="bg-gray-900 text-gray-300 pt-16 pb-8">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
-          <div>
-            <h4 className="text-white text-xl font-bold mb-6">নির্বাচনী প্রচারণা</h4>
-            <p className="text-gray-400 mb-6 leading-relaxed">
+          <div className="space-y-6">
+            <div className="flex items-center gap-4">
+              <img src={LOGOS.PARTY} alt="Party Logo" className="w-16 h-16 object-contain" />
+              <div>
+                <h4 className="text-white text-xl font-black">নির্বাচনী প্রচারণা</h4>
+                <p className="text-green-500 font-bold text-xs uppercase tracking-widest">{CANDIDATE.party}</p>
+              </div>
+            </div>
+            <p className="text-gray-400 leading-relaxed">
               {CANDIDATE.name} - এর সমর্থনে ডিজিটাল প্ল্যাটফর্ম। <br />
               মোরেলগঞ্জ ও শরণখোলার সুন্দর আগামী নিশ্চিত করতে আপনার মূল্যবান ভোট ও দোয়া প্রত্যাশী।
             </p>

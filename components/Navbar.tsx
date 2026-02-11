@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Image as ImageIcon, Sparkles, UserPlus, Home, BarChart2, ShieldCheck, HelpCircle } from 'lucide-react';
-import { CANDIDATE } from '../constants';
+import { CANDIDATE, LOGOS } from '../constants';
 
 interface NavbarProps {
   activeTab: 'home' | 'frame' | 'ai' | 'results' | 'volunteers' | 'guide' | 'join';
@@ -16,8 +16,8 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
           className="flex items-center gap-3 cursor-pointer shrink-0 group"
           onClick={() => setActiveTab('home')}
         >
-          <div className="w-11 h-11 bg-gradient-to-br from-green-700 to-emerald-800 rounded-xl flex items-center justify-center text-white font-black shadow-lg shadow-green-200 group-hover:scale-110 transition-transform">
-            BA
+          <div className="w-12 h-12 rounded-xl flex items-center justify-center overflow-hidden shadow-lg shadow-green-100 group-hover:scale-110 transition-transform">
+            <img src={LOGOS.PARTY} alt="Logo" className="w-full h-full object-contain" />
           </div>
           <div className="hidden lg:block">
             <h1 className="font-black text-lg leading-tight text-green-800">{CANDIDATE.name}</h1>
