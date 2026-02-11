@@ -91,12 +91,13 @@ export const FrameCreator: React.FC = () => {
 
   const drawWatermark = (ctx: CanvasRenderingContext2D, size: number) => {
     ctx.save();
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
-    ctx.font = 'bold 20px Arial';
+    // Smaller watermark as requested: Power by: Eng'r Walid
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
+    ctx.font = 'bold 16px Arial';
     ctx.textAlign = 'right';
     ctx.shadowColor = 'rgba(0,0,0,0.5)';
-    ctx.shadowBlur = 6;
-    ctx.fillText("Power by: Eng'r Walid", size - 40, size - 40);
+    ctx.shadowBlur = 4;
+    ctx.fillText("Power by: Eng'r Walid", size - 25, size - 25);
     ctx.restore();
   };
 
@@ -335,53 +336,53 @@ export const FrameCreator: React.FC = () => {
   };
 
   return (
-    <div className="bg-white rounded-[40px] shadow-2xl overflow-hidden border border-gray-100 p-4 md:p-8">
-      <div className="flex flex-col lg:flex-row gap-12">
-        <div className="lg:w-1/2 space-y-6">
-          <div className="relative aspect-square rounded-[32px] overflow-hidden bg-gray-50 border-8 border-white shadow-2xl ring-1 ring-black/5">
+    <div className="bg-white rounded-[60px] shadow-3xl overflow-hidden border border-gray-100 p-6 md:p-12">
+      <div className="flex flex-col lg:flex-row gap-16">
+        <div className="lg:w-1/2 space-y-8">
+          <div className="relative aspect-square rounded-[48px] overflow-hidden bg-gray-50 border-[12px] border-white shadow-3xl ring-1 ring-black/5 group">
             <canvas ref={canvasRef} className="w-full h-full object-contain cursor-grab active:cursor-grabbing" />
             {!image && (
               <div 
                 onClick={() => fileInputRef.current?.click()}
                 className="absolute inset-0 flex flex-col items-center justify-center cursor-pointer hover:bg-black/5 transition-all"
               >
-                <div className="w-20 h-20 bg-green-600 rounded-3xl flex items-center justify-center text-white shadow-xl mb-4">
-                  <Upload size={32} />
+                <div className="w-24 h-24 bg-green-600 rounded-[32px] flex items-center justify-center text-white shadow-2xl mb-6 group-hover:scale-110 transition-transform">
+                  <Upload size={40} />
                 </div>
-                <p className="font-bold text-gray-800 text-xl">আপনার ছবি যোগ করুন</p>
-                <p className="text-gray-400 text-sm mt-1">PNG, JPG অথবা JPEG</p>
+                <p className="font-black text-gray-800 text-2xl">আপনার ছবি যোগ করুন</p>
+                <p className="text-gray-400 font-bold mt-2 italic">PNG বা JPG ফরম্যাটে আপলোড করুন</p>
               </div>
             )}
           </div>
 
-          <div className="flex justify-center gap-3">
-             <ControlBtn icon={<ZoomIn size={20}/>} onClick={() => setZoom(z => Math.min(z + 0.1, 4))} />
-             <ControlBtn icon={<ZoomOut size={20}/>} onClick={() => setZoom(z => Math.max(z - 0.1, 0.5))} />
-             <ControlBtn icon={<RotateCw size={20}/>} onClick={() => setRotation(r => r + 90)} />
-             <ControlBtn icon={<Trash2 size={20}/>} onClick={() => setImage(null)} color="text-red-500 bg-red-50" />
+          <div className="flex justify-center gap-4">
+             <ControlBtn icon={<ZoomIn size={24}/>} onClick={() => setZoom(z => Math.min(z + 0.1, 4))} />
+             <ControlBtn icon={<ZoomOut size={24}/>} onClick={() => setZoom(z => Math.max(z - 0.1, 0.5))} />
+             <ControlBtn icon={<RotateCw size={24}/>} onClick={() => setRotation(r => r + 90)} />
+             <ControlBtn icon={<Trash2 size={24}/>} onClick={() => setImage(null)} color="text-red-500 bg-red-50" />
           </div>
         </div>
 
         <div className="lg:w-1/2 flex flex-col h-full">
-          <div className="flex-grow space-y-8">
+          <div className="flex-grow space-y-10">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="p-3 bg-green-100 text-green-700 rounded-2xl">
-                  <LayoutGrid size={24} />
+              <div className="flex items-center gap-4">
+                <div className="p-4 bg-green-100 text-green-700 rounded-[24px]">
+                  <LayoutGrid size={28} />
                 </div>
-                <h3 className="text-2xl font-black text-gray-800 tracking-tight">স্টাইল নির্বাচন করুন</h3>
+                <h3 className="text-3xl font-black text-gray-800 tracking-tight">স্টাইল পছন্দ করুন</h3>
               </div>
-              <div className="text-xs font-bold text-gray-400 uppercase tracking-widest bg-gray-100 px-3 py-1 rounded-full">
-                {FRAME_OPTIONS.length} টি এভাটার
+              <div className="text-xs font-black text-white uppercase tracking-widest bg-red-600 px-4 py-2 rounded-full shadow-lg">
+                {FRAME_OPTIONS.length} টি স্টাইল
               </div>
             </div>
 
-            <div className="relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+            <div className="relative group">
+              <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-green-600 transition-colors" size={24} />
               <input 
                 type="text" 
-                placeholder="স্লোগান বা স্টাইল সার্চ করুন..." 
-                className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:border-green-500 outline-none transition-all"
+                placeholder="স্লোগান বা স্টাইল দিয়ে খুঁজুন..." 
+                className="w-full pl-16 pr-8 py-6 bg-gray-50 border-2 border-transparent rounded-[32px] focus:border-green-500 focus:bg-white outline-none transition-all font-bold text-lg"
                 value={searchTerm}
                 onChange={(e) => {
                   setSearchTerm(e.target.value);
@@ -390,60 +391,60 @@ export const FrameCreator: React.FC = () => {
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4 min-h-[340px]">
+            <div className="grid grid-cols-2 gap-5 min-h-[380px]">
               {currentFrames.map(frame => (
                 <button
                   key={frame.id}
                   onClick={() => setSelectedFrame(frame)}
-                  className={`relative p-4 rounded-3xl border-2 transition-all text-left overflow-hidden ${
+                  className={`relative p-6 rounded-[36px] border-[3px] transition-all text-left overflow-hidden ${
                     selectedFrame.id === frame.id 
-                      ? 'border-green-600 bg-green-50 shadow-lg' 
-                      : 'border-gray-50 hover:border-green-200 bg-white'
+                      ? 'border-green-600 bg-green-50 shadow-2xl scale-105' 
+                      : 'border-gray-100 hover:border-green-200 bg-white'
                   }`}
                 >
-                  <div className="flex items-center justify-between mb-2">
-                    <div className={`w-3 h-3 rounded-full ${selectedFrame.id === frame.id ? 'bg-green-600' : 'bg-gray-200'}`} />
-                    <span className="text-[10px] font-bold text-gray-300 uppercase">{frame.type}</span>
+                  <div className="flex items-center justify-between mb-3">
+                    <div className={`w-4 h-4 rounded-full ${selectedFrame.id === frame.id ? 'bg-green-600 animate-pulse' : 'bg-gray-200'}`} />
+                    <span className="text-[10px] font-black text-gray-300 uppercase tracking-widest">{frame.type}</span>
                   </div>
-                  <div className="font-bold text-gray-800 text-sm leading-tight mb-2">{frame.slogan}</div>
-                  <div className="flex gap-1">
-                    <div className="w-3 h-3 rounded-full" style={{ backgroundColor: frame.color }} />
-                    <div className="w-3 h-3 rounded-full" style={{ backgroundColor: frame.accent }} />
+                  <div className="font-black text-gray-800 text-lg leading-tight mb-3">{frame.slogan}</div>
+                  <div className="flex gap-2">
+                    <div className="w-4 h-4 rounded-full shadow-sm" style={{ backgroundColor: frame.color }} />
+                    <div className="w-4 h-4 rounded-full shadow-sm" style={{ backgroundColor: frame.accent }} />
                   </div>
                 </button>
               ))}
             </div>
 
-            <div className="flex items-center justify-center gap-4 py-4">
+            <div className="flex items-center justify-center gap-6 py-4">
                <button 
                 disabled={currentPage === 0}
                 onClick={() => setCurrentPage(p => p - 1)}
-                className="p-3 rounded-xl bg-gray-50 text-gray-600 hover:bg-green-100 hover:text-green-700 disabled:opacity-30 transition-all"
+                className="p-4 rounded-2xl bg-gray-50 text-gray-600 hover:bg-green-100 hover:text-green-700 disabled:opacity-30 transition-all shadow-md"
                >
-                 <ChevronLeft />
+                 <ChevronLeft size={28} />
                </button>
-               <span className="font-bold text-gray-500">পৃষ্ঠা {currentPage + 1} / {totalPages || 1}</span>
+               <span className="font-black text-gray-500 text-xl">পৃষ্ঠা {currentPage + 1} / {totalPages || 1}</span>
                <button 
                 disabled={currentPage >= totalPages - 1}
                 onClick={() => setCurrentPage(p => p + 1)}
-                className="p-3 rounded-xl bg-gray-50 text-gray-600 hover:bg-green-100 hover:text-green-700 disabled:opacity-30 transition-all"
+                className="p-4 rounded-2xl bg-gray-50 text-gray-600 hover:bg-green-100 hover:text-green-700 disabled:opacity-30 transition-all shadow-md"
                >
-                 <ChevronRight />
+                 <ChevronRight size={28} />
                </button>
             </div>
           </div>
 
-          <div className="mt-8 pt-8 border-t border-gray-100 space-y-4">
+          <div className="mt-12 pt-10 border-t border-gray-100 space-y-6">
              <input type="file" ref={fileInputRef} onChange={handleImageUpload} accept="image/*" className="hidden" />
              {!image ? (
                <button 
                 onClick={() => fileInputRef.current?.click()}
-                className="w-full py-6 bg-green-600 text-white rounded-3xl font-black text-xl hover:bg-green-700 transition-all shadow-xl shadow-green-200 flex items-center justify-center gap-3"
-               >
-                <Sparkles /> নির্বাচনি ফ্রেম বানান
+                className="w-full py-8 bg-green-600 text-white rounded-[40px] font-black text-2xl hover:bg-green-700 transition-all shadow-4xl flex items-center justify-center gap-4"
+              >
+                <Sparkles size={32} /> পোস্টার তৈরি শুরু করুন
                </button>
              ) : (
-               <div className="grid grid-cols-2 gap-4">
+               <div className="grid grid-cols-2 gap-6">
                  <button 
                   onClick={() => {
                     const canvas = canvasRef.current;
@@ -453,18 +454,16 @@ export const FrameCreator: React.FC = () => {
                     link.href = canvas.toDataURL('image/png', 1.0);
                     link.click();
                   }}
-                  className="flex items-center justify-center gap-3 py-6 bg-green-700 text-white rounded-3xl font-black text-lg hover:bg-green-800 transition-all shadow-xl shadow-green-100"
+                  className="flex items-center justify-center gap-4 py-8 bg-green-700 text-white rounded-[40px] font-black text-xl hover:bg-green-800 transition-all shadow-3xl"
                  >
-                  <Download size={24} />
-                  ডাউনলোড
+                  <Download size={28} /> ডাউনলোড
                  </button>
                  <button 
                   onClick={handleShare}
                   disabled={isSharing}
-                  className="flex items-center justify-center gap-3 py-6 bg-blue-600 text-white rounded-3xl font-black text-lg hover:bg-blue-700 transition-all shadow-xl shadow-blue-100 disabled:opacity-50"
+                  className="flex items-center justify-center gap-4 py-8 bg-blue-600 text-white rounded-[40px] font-black text-xl hover:bg-blue-700 transition-all shadow-3xl disabled:opacity-50"
                  >
-                  {isSharing ? <Loader2 className="animate-spin" /> : <Share2 size={24} />}
-                  শেয়ার করুন
+                  {isSharing ? <Loader2 className="animate-spin" /> : <Share2 size={28} />} শেয়ার
                  </button>
                </div>
              )}
@@ -476,7 +475,7 @@ export const FrameCreator: React.FC = () => {
 };
 
 const ControlBtn: React.FC<{ icon: React.ReactNode, onClick: () => void, color?: string }> = ({ icon, onClick, color = "bg-white text-gray-600" }) => (
-  <button onClick={onClick} className={`p-4 rounded-2xl shadow-lg hover:scale-110 transition-all border border-gray-100 ${color}`}>
+  <button onClick={onClick} className={`p-5 rounded-3xl shadow-xl hover:scale-110 active:scale-90 transition-all border border-gray-100 ${color}`}>
     {icon}
   </button>
 );
