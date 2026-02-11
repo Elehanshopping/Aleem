@@ -15,13 +15,15 @@ const firebaseConfig = {
 let db: Firestore | null = null;
 
 try {
-  const app: FirebaseApp = !getApps().length 
+  // Singleton pattern for Firebase App
+  const app: FirebaseApp = getApps().length === 0 
     ? initializeApp(firebaseConfig) 
     : getApp();
     
+  // Initialize Firestore
   db = getFirestore(app);
 } catch (error) {
-  console.error("Firebase/Firestore could not be initialized:", error);
+  console.error("Firebase/Firestore initialization error:", error);
 }
 
 export { db };
