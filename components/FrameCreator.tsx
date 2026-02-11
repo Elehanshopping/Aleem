@@ -1,6 +1,6 @@
 
 import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { Upload, Download, RotateCw, ZoomIn, ZoomOut, Trash2, LayoutGrid, Search, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Upload, Download, RotateCw, ZoomIn, ZoomOut, Trash2, LayoutGrid, Search, ChevronLeft, ChevronRight, Share2, Loader2 } from 'lucide-react';
 import { CANDIDATE, FRAME_OPTIONS, ALIM_IMAGES, LOGOS } from '../constants';
 
 const ITEMS_PER_PAGE = 8;
@@ -12,6 +12,7 @@ export const FrameCreator: React.FC = () => {
   const [rotation, setRotation] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isSharing, setIsSharing] = useState(false);
   
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -297,6 +298,34 @@ export const FrameCreator: React.FC = () => {
     drawCanvas();
   }, [image, selectedFrame, zoom, rotation]);
 
+  const handleShare = async () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    setIsSharing(true);
+    try {
+      canvas.toBlob(async (blob) => {
+        if (!blob) return;
+        const file = new File([blob], 'alim_avatar.png', { type: 'image/png' });
+        
+        if (navigator.share) {
+          await navigator.share({
+            title: `${CANDIDATE.name} নির্বাচনী এভাটার`,
+            text: `আমি ${CANDIDATE.name}-এর সমর্থনে এই এভাটারটি তৈরি করেছি। দাড়িপাল্লা মার্কায় ভোট দিন!`,
+            files: [file],
+          });
+        } else {
+          // Fallback if sharing is not supported
+          alert('দুঃখিত, আপনার ব্রাউজার সরাসরি শেয়ারিং সাপোর্ট করে না। ডাউনলোড করে শেয়ার করুন।');
+        }
+        setIsSharing(false);
+      }, 'image/png');
+    } catch (err) {
+      console.error('Error sharing:', err);
+      setIsSharing(false);
+    }
+  };
+
   return (
     <div className="bg-white rounded-[40px] shadow-2xl overflow-hidden border border-gray-100 p-4 md:p-8">
       <div className="flex flex-col lg:flex-row gap-12">
@@ -408,20 +437,30 @@ export const FrameCreator: React.FC = () => {
                 আপনার ছবি যোগ করুন
                </button>
              ) : (
-               <button 
-                onClick={() => {
-                  const canvas = canvasRef.current;
-                  if (!canvas) return;
-                  const link = document.createElement('a');
-                  link.download = `alim_avatar_${selectedFrame.id}.png`;
-                  link.href = canvas.toDataURL('image/png', 1.0);
-                  link.click();
-                }}
-                className="w-full flex items-center justify-center gap-3 py-6 bg-red-600 text-white rounded-3xl font-black text-xl hover:bg-red-700 transition-all shadow-xl shadow-red-200"
-               >
-                <Download size={24} />
-                এভাটার সেভ করুন
-               </button>
+               <div className="grid grid-cols-2 gap-4">
+                 <button 
+                  onClick={() => {
+                    const canvas = canvasRef.current;
+                    if (!canvas) return;
+                    const link = document.createElement('a');
+                    link.download = `alim_avatar_${selectedFrame.id}.png`;
+                    link.href = canvas.toDataURL('image/png', 1.0);
+                    link.click();
+                  }}
+                  className="flex items-center justify-center gap-3 py-6 bg-green-700 text-white rounded-3xl font-black text-lg hover:bg-green-800 transition-all shadow-xl shadow-green-100"
+                 >
+                  <Download size={24} />
+                  ডাউনলোড
+                 </button>
+                 <button 
+                  onClick={handleShare}
+                  disabled={isSharing}
+                  className="flex items-center justify-center gap-3 py-6 bg-blue-600 text-white rounded-3xl font-black text-lg hover:bg-blue-700 transition-all shadow-xl shadow-blue-100 disabled:opacity-50"
+                 >
+                  {isSharing ? <Loader2 className="animate-spin" /> : <Share2 size={24} />}
+                  শেয়ার করুন
+                 </button>
+               </div>
              )}
           </div>
         </div>
