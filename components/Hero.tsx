@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { CANDIDATE, ALIM_IMAGES, LOGOS } from '../constants';
-import { ArrowRight, UserPlus } from 'lucide-react';
+import { ArrowRight, UserPlus, Star } from 'lucide-react';
 import { CountdownTimer } from './CountdownTimer';
 
 export const Hero: React.FC<{ onGetStarted: () => void, onJoinClick: () => void }> = ({ onGetStarted, onJoinClick }) => {
@@ -31,17 +31,20 @@ export const Hero: React.FC<{ onGetStarted: () => void, onJoinClick: () => void 
               <span className="text-white font-black border-b-8 border-red-600 pb-1">{CANDIDATE.name}</span>
             </p>
 
-            <div className="max-w-md mx-auto lg:mx-0 py-8 space-y-6">
+            <div className="max-w-md mx-auto lg:mx-0 py-8 space-y-8">
               <CountdownTimer />
-              <button 
-                onClick={onJoinClick}
-                className="w-full bg-gradient-to-r from-yellow-400 to-yellow-600 text-green-950 py-5 rounded-3xl font-black text-xl shadow-2xl hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-3 animate-bounce"
-              >
-                <UserPlus size={24} /> এখনই সদস্য হোন
-              </button>
+              <div className="relative group/join">
+                <div className="absolute -inset-2 bg-yellow-400 rounded-[30px] blur-xl opacity-50 group-hover/join:opacity-100 transition-all animate-glow"></div>
+                <button 
+                  onClick={onJoinClick}
+                  className="relative w-full bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 text-green-950 py-6 rounded-3xl font-black text-2xl shadow-2xl hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-4"
+                >
+                  <UserPlus size={28} /> এখনই সদস্য হোন <Star size={20} fill="currentColor" />
+                </button>
+              </div>
             </div>
 
-            <div className="flex flex-wrap justify-center lg:justify-start gap-6">
+            <div className="flex flex-wrap justify-center lg:justify-start gap-6 pt-4">
               <button 
                 onClick={onGetStarted}
                 className="bg-white text-green-900 px-10 py-5 rounded-3xl font-black shadow-2xl hover:bg-green-50 transition-all hover:scale-105 active:scale-95 flex items-center gap-4 text-lg group"

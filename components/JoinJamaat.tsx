@@ -35,19 +35,33 @@ export const JoinJamaat: React.FC = () => {
 
   useEffect(() => {
     if (!db) {
+      console.warn("Firestore is not available. Showing demo join requests.");
+      setRequests([
+        { id: '1', name: 'মোঃ হাসিবুর রহমান', phone: '01711XXXXXX', wing: 'যুব-জামায়াত', location: 'মোরেলগঞ্জ সদর', timestamp: null },
+        { id: '2', name: 'আবদুল্লাহ আল মারুফ', phone: '01822XXXXXX', wing: 'বাংলাদেশ ইসলামী ছাত্রশিবির', location: 'শরণখোলা', timestamp: null }
+      ]);
       setLoading(false);
       return;
     }
-    const q = query(collection(db, 'join_requests'), orderBy('timestamp', 'desc'));
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const data = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as JoinRequest[];
-      setRequests(data);
+    
+    try {
+      const q = query(collection(db, 'join_requests'), orderBy('timestamp', 'desc'));
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+        const data = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        })) as JoinRequest[];
+        setRequests(data);
+        setLoading(false);
+      }, (err) => {
+        console.error("Firestore error:", err);
+        setLoading(false);
+      });
+      return () => unsubscribe();
+    } catch (e) {
+      console.error("Failed to setup listener:", e);
       setLoading(false);
-    });
-    return () => unsubscribe();
+    }
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -55,18 +69,16 @@ export const JoinJamaat: React.FC = () => {
     setSubmitting(true);
 
     try {
-      // 1. Save to Firestore
       if (db) {
         await addDoc(collection(db, 'join_requests'), {
           ...formData,
           timestamp: serverTimestamp()
         });
+      } else {
+        // Mock success for demo
+        await new Promise(res => setTimeout(res, 1000));
+        console.log("Demo Mode: Simulated submission to TaksidWalid150@gmail.com", formData);
       }
-
-      // 2. Email simulation logic
-      // In a real production app, you would use EmailJS or a Firebase Cloud Function
-      // to send the email to TaksidWalid150@gmail.com
-      console.log("Sending email to TaksidWalid150@gmail.com with data:", formData);
 
       setSuccess(true);
       setFormData({ name: '', phone: '', wing: 'বাংলাদেশ জামায়াতে ইসলামী', location: '' });
