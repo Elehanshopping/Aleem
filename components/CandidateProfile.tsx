@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { CANDIDATE, ALIM_IMAGES, SUPPORTERS } from '../constants';
-import { GraduationCap, MapPin, Heart, MessageSquare, Users, ShieldCheck, Scale } from 'lucide-react';
+import { GraduationCap, MapPin, Heart, MessageSquare, Users, ShieldCheck, Scale, Phone } from 'lucide-react';
 
 export const CandidateProfile: React.FC = () => {
   return (
@@ -26,7 +26,7 @@ export const CandidateProfile: React.FC = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-5xl mx-auto">
-            {SUPPORTERS.map((leader, index) => (
+            {SUPPORTERS.map((leader: any, index: number) => (
               <div key={index} className="bg-white p-6 rounded-[40px] shadow-2xl border border-gray-100 flex items-center gap-8 group hover:-translate-y-2 transition-all duration-500">
                 <div className="relative shrink-0">
                   <div className="absolute -inset-2 bg-gradient-to-tr from-green-600 to-emerald-400 rounded-[30px] opacity-20 group-hover:opacity-40 blur transition-all"></div>
@@ -38,7 +38,12 @@ export const CandidateProfile: React.FC = () => {
                 </div>
                 <div>
                   <h4 className="text-xl md:text-2xl font-black text-gray-900 mb-2">{leader.name}</h4>
-                  <p className="text-green-700 font-bold text-sm mb-4">{leader.title}</p>
+                  <p className="text-green-700 font-bold text-sm mb-1">{leader.title}</p>
+                  {leader.contact && (
+                    <div className="flex items-center gap-2 text-gray-500 font-bold text-xs mb-3">
+                      <Phone size={14} className="text-green-600" /> যোগাযোগ: {leader.contact}
+                    </div>
+                  )}
                   <div className="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-widest">
                     <ShieldCheck size={14} className="text-blue-500" /> ভেরিফাইড লিডারশিপ
                   </div>

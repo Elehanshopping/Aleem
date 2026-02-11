@@ -1,11 +1,11 @@
 
 import React from 'react';
-import { Image as ImageIcon, Sparkles, User, Home, BarChart2, ShieldCheck, HelpCircle } from 'lucide-react';
+import { Image as ImageIcon, Sparkles, UserPlus, Home, BarChart2, ShieldCheck, HelpCircle } from 'lucide-react';
 import { CANDIDATE } from '../constants';
 
 interface NavbarProps {
-  activeTab: 'home' | 'frame' | 'ai' | 'results' | 'volunteers' | 'guide';
-  setActiveTab: (tab: 'home' | 'frame' | 'ai' | 'results' | 'volunteers' | 'guide') => void;
+  activeTab: 'home' | 'frame' | 'ai' | 'results' | 'volunteers' | 'guide' | 'join';
+  setActiveTab: (tab: 'home' | 'frame' | 'ai' | 'results' | 'volunteers' | 'guide' | 'join') => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
@@ -30,6 +30,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
           <NavItem icon={<ImageIcon size={18} />} label="এভাটার" active={activeTab === 'frame'} onClick={() => setActiveTab('frame')} />
           <NavItem icon={<BarChart2 size={18} />} label="ফলাফল" active={activeTab === 'results'} onClick={() => setActiveTab('results')} />
           <NavItem icon={<ShieldCheck size={18} />} label="ভলান্টিয়ার" active={activeTab === 'volunteers'} onClick={() => setActiveTab('volunteers')} />
+          <NavItem icon={<UserPlus size={18} />} label="জামাতে যোগ দিন" active={activeTab === 'join'} onClick={() => setActiveTab('join')} />
           <NavItem icon={<HelpCircle size={18} />} label="গণভোট কী" active={activeTab === 'guide'} onClick={() => setActiveTab('guide')} />
           <NavItem icon={<Sparkles size={18} />} label="AI পোস্ট" active={activeTab === 'ai'} onClick={() => setActiveTab('ai')} />
         </div>

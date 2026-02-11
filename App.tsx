@@ -11,15 +11,16 @@ import { ElectionBoard } from './components/ElectionBoard';
 import { VolunteerSystem } from './components/VolunteerSystem';
 import { GonovoteGuide } from './components/GonovoteGuide';
 import { PrivacyPolicy } from './components/PrivacyPolicy';
+import { JoinJamaat } from './components/JoinJamaat';
 
-type Tab = 'home' | 'frame' | 'ai' | 'results' | 'volunteers' | 'guide' | 'privacy';
+type Tab = 'home' | 'frame' | 'ai' | 'results' | 'volunteers' | 'guide' | 'privacy' | 'join';
 
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<Tab>('home');
 
   return (
     <div className="min-h-screen flex flex-col bg-[#fcfcfc] selection:bg-green-100 selection:text-green-900">
-      <Navbar activeTab={activeTab === 'privacy' ? 'home' : activeTab} setActiveTab={setActiveTab} />
+      <Navbar activeTab={activeTab === 'privacy' ? 'home' : activeTab as any} setActiveTab={setActiveTab as any} />
       
       <main className="flex-grow pt-20">
         {activeTab === 'home' && (
@@ -77,6 +78,12 @@ const App: React.FC = () => {
               </p>
             </div>
             <VolunteerSystem />
+          </div>
+        )}
+
+        {activeTab === 'join' && (
+          <div className="container mx-auto px-4 py-12 animate-in fade-in duration-500">
+            <JoinJamaat />
           </div>
         )}
 
