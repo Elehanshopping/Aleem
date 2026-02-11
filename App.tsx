@@ -8,6 +8,7 @@ import { CandidateProfile } from './components/CandidateProfile';
 import { PhotoGallery } from './components/PhotoGallery';
 import { Footer } from './components/Footer';
 import { ElectionBoard } from './components/ElectionBoard';
+import { OnlineSurvey } from './components/OnlineSurvey';
 import { VolunteerSystem } from './components/VolunteerSystem';
 import { GonovoteGuide } from './components/GonovoteGuide';
 import { PrivacyPolicy } from './components/PrivacyPolicy';
@@ -16,7 +17,7 @@ import { CentralLeaders } from './components/CentralLeaders';
 import { LOGOS } from './constants';
 import { UserPlus, ArrowRight, ShieldCheck } from 'lucide-react';
 
-type Tab = 'home' | 'frame' | 'ai' | 'results' | 'volunteers' | 'guide' | 'privacy' | 'join';
+type Tab = 'home' | 'frame' | 'ai' | 'results' | 'survey' | 'volunteers' | 'guide' | 'privacy' | 'join';
 
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<Tab>('home');
@@ -33,7 +34,6 @@ const App: React.FC = () => {
               onJoinClick={() => setActiveTab('join')}
             />
             
-            {/* Massive Call to Action for Joining */}
             <section className="relative overflow-hidden py-24 bg-white">
               <div className="container mx-auto px-4">
                 <div className="bg-gradient-to-br from-green-900 to-emerald-950 rounded-[60px] p-8 md:p-20 text-white shadow-2xl relative">
@@ -101,12 +101,24 @@ const App: React.FC = () => {
           </div>
         )}
 
+        {activeTab === 'survey' && (
+          <div className="container mx-auto px-4 py-12 animate-in fade-in duration-500">
+            <div className="text-center max-w-3xl mx-auto mb-12">
+              <h2 className="text-4xl md:text-6xl font-black text-green-900 mb-6 uppercase tracking-tight">ফলাফল সারা বাংলাদেশ</h2>
+              <p className="text-lg text-gray-500 leading-relaxed font-medium">
+                জাতীয় জরিপে জনগণের সরাসরি অংশগ্রহণ ও বর্তমান রাজনৈতিক প্রেক্ষাপটের চিত্র।
+              </p>
+            </div>
+            <OnlineSurvey />
+          </div>
+        )}
+
         {activeTab === 'results' && (
           <div className="container mx-auto px-4 py-12 animate-in fade-in duration-500">
             <div className="text-center max-w-3xl mx-auto mb-12">
-              <h2 className="text-4xl md:text-6xl font-black text-green-900 mb-6 uppercase tracking-tight">নির্বাচনী ফলাফল</h2>
+              <h2 className="text-4xl md:text-6xl font-black text-green-900 mb-6 uppercase tracking-tight">ফলাফল বাগেরহাট ৪</h2>
               <p className="text-lg text-gray-500 leading-relaxed font-medium">
-                বাগেরহাট-৪ আসনের লাইভ নির্বাচনী বোর্ড। ১২ ফেব্রুয়ারি ভোট গ্রহণ শেষে এখানে বিস্তারিত ফলাফল প্রদর্শিত হবে।
+                বাগেরহাট-৪ আসনের লাইভ সোস্যাল ভোট ও স্থানীয় নির্বাচনী আপডেট বোর্ড।
               </p>
             </div>
             <ElectionBoard />
@@ -133,6 +145,12 @@ const App: React.FC = () => {
 
         {activeTab === 'guide' && (
           <div className="container mx-auto px-4 py-12 animate-in fade-in duration-500">
+            <div className="text-center max-w-3xl mx-auto mb-12">
+              <h2 className="text-4xl md:text-6xl font-black text-green-900 mb-6 uppercase tracking-tight">গণভোট কি?</h2>
+              <p className="text-lg text-gray-500 leading-relaxed font-medium">
+                গণতান্ত্রিক প্রক্রিয়ায় জনগণের সরাসরি অংশগ্রহণের গুরুত্ব এবং প্রয়োজনীয়তা সম্পর্কে জানুন।
+              </p>
+            </div>
             <GonovoteGuide />
           </div>
         )}
@@ -143,7 +161,6 @@ const App: React.FC = () => {
           </div>
         )}
 
-        {/* Global Central Leaders Section - Shown on all pages above Footer */}
         <CentralLeaders />
       </main>
 

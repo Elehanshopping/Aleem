@@ -1,6 +1,6 @@
 
 import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { Upload, Download, RotateCw, ZoomIn, ZoomOut, Trash2, LayoutGrid, Search, ChevronLeft, ChevronRight, Share2, Loader2 } from 'lucide-react';
+import { Upload, Download, RotateCw, ZoomIn, ZoomOut, Trash2, LayoutGrid, Search, ChevronLeft, ChevronRight, Share2, Loader2, Sparkles } from 'lucide-react';
 import { CANDIDATE, FRAME_OPTIONS, ALIM_IMAGES, LOGOS } from '../constants';
 
 const ITEMS_PER_PAGE = 8;
@@ -75,6 +75,7 @@ export const FrameCreator: React.FC = () => {
         ctx.restore();
 
         renderComplexStyle(ctx, size, selectedFrame);
+        drawWatermark(ctx, size);
       };
     } else {
       ctx.fillStyle = '#f1f5f9';
@@ -82,9 +83,21 @@ export const FrameCreator: React.FC = () => {
       ctx.fillStyle = '#94a3b8';
       ctx.font = 'bold 45px Hind Siliguri';
       ctx.textAlign = 'center';
-      ctx.fillText('আপনার এভাটার তৈরি করতে ছবি যোগ করুন', size / 2, size / 2);
+      ctx.fillText('নির্বাচনি ফ্রেম তৈরি করতে ছবি যোগ করুন', size / 2, size / 2);
       renderComplexStyle(ctx, size, selectedFrame);
+      drawWatermark(ctx, size);
     }
+  };
+
+  const drawWatermark = (ctx: CanvasRenderingContext2D, size: number) => {
+    ctx.save();
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+    ctx.font = 'bold 20px Arial';
+    ctx.textAlign = 'right';
+    ctx.shadowColor = 'rgba(0,0,0,0.5)';
+    ctx.shadowBlur = 6;
+    ctx.fillText("Power by: Eng'r Walid", size - 40, size - 40);
+    ctx.restore();
   };
 
   const renderComplexStyle = (ctx: CanvasRenderingContext2D, size: number, frame: any) => {
@@ -123,12 +136,8 @@ export const FrameCreator: React.FC = () => {
         drawBanner(ctx, size, size * 0.25, color, accent, slogan, true);
     }
 
-    // Always draw Scale Image Logo
     drawScaleLogo(ctx, 150, 150, 100);
-
-    // Always draw Alim's portrait badge
     drawAlimBadge(ctx, size, ALIM_IMAGES.portrait_bg);
-
     ctx.restore();
   };
 
@@ -315,7 +324,6 @@ export const FrameCreator: React.FC = () => {
             files: [file],
           });
         } else {
-          // Fallback if sharing is not supported
           alert('দুঃখিত, আপনার ব্রাউজার সরাসরি শেয়ারিং সাপোর্ট করে না। ডাউনলোড করে শেয়ার করুন।');
         }
         setIsSharing(false);
@@ -329,7 +337,6 @@ export const FrameCreator: React.FC = () => {
   return (
     <div className="bg-white rounded-[40px] shadow-2xl overflow-hidden border border-gray-100 p-4 md:p-8">
       <div className="flex flex-col lg:flex-row gap-12">
-        {/* Preview Area */}
         <div className="lg:w-1/2 space-y-6">
           <div className="relative aspect-square rounded-[32px] overflow-hidden bg-gray-50 border-8 border-white shadow-2xl ring-1 ring-black/5">
             <canvas ref={canvasRef} className="w-full h-full object-contain cursor-grab active:cursor-grabbing" />
@@ -355,7 +362,6 @@ export const FrameCreator: React.FC = () => {
           </div>
         </div>
 
-        {/* Controls Area */}
         <div className="lg:w-1/2 flex flex-col h-full">
           <div className="flex-grow space-y-8">
             <div className="flex items-center justify-between">
@@ -432,9 +438,9 @@ export const FrameCreator: React.FC = () => {
              {!image ? (
                <button 
                 onClick={() => fileInputRef.current?.click()}
-                className="w-full py-6 bg-green-600 text-white rounded-3xl font-black text-xl hover:bg-green-700 transition-all shadow-xl shadow-green-200"
+                className="w-full py-6 bg-green-600 text-white rounded-3xl font-black text-xl hover:bg-green-700 transition-all shadow-xl shadow-green-200 flex items-center justify-center gap-3"
                >
-                আপনার ছবি যোগ করুন
+                <Sparkles /> নির্বাচনি ফ্রেম বানান
                </button>
              ) : (
                <div className="grid grid-cols-2 gap-4">

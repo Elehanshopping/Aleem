@@ -2,7 +2,7 @@
 import { CandidateInfo, DeveloperInfo, FrameOption } from './types';
 
 export const CANDIDATE: CandidateInfo = {
-  name: "প্রফেসর মোঃ আবদুল আলিম",
+  name: "প্রফসর মোঃ আবদুল আলিম",
   party: "বাংলাদেশ জামায়াতে ইসলামী",
   alliance: "১১ দলীয় জোট",
   constituency: "বাগেরহাট-৪",
@@ -25,6 +25,13 @@ export const LOGOS = {
   PADDY: "https://i.ibb.co.com/0RqkNtpR/images.jpg", 
   DEER: "https://static.thenounproject.com/png/1183313-200.png" 
 };
+
+// 300 Parliamentary Seats for Bangladesh
+export const SEATS_300 = Array.from({ length: 300 }, (_, i) => ({
+  id: i + 1,
+  name: `${['ঢাকা', 'চট্টগ্রাম', 'রাজশাহী', 'খুলনা', 'বরিশাল', 'সিলেট', 'রংপুর', 'ময়মনসিংহ'][i % 8]}-${i + 1}`,
+  status: i % 10 === 0 ? 'ঘোষিত' : 'গণনা চলছে'
+}));
 
 export const SUPPORTERS = [
   {
