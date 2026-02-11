@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { ImageIcon, Sparkles, UserPlus, Home, BarChart2, HelpCircle, ClipboardList, Clock as ClockIcon, Calendar } from 'lucide-react';
+import { ImageIcon, Sparkles, UserPlus, Home, BarChart2, HelpCircle, ClipboardList, Clock as ClockIcon, Calendar, Info } from 'lucide-react';
 import { CANDIDATE, LOGOS } from '../constants';
 
 interface NavbarProps {
@@ -40,7 +40,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
           </div>
         </div>
 
-        {/* Live Clock & Date for All Pages */}
+        {/* Live Clock & Date */}
         <div className="hidden md:flex items-center gap-6 px-6 py-2 bg-gray-50 rounded-2xl border border-gray-100 shadow-inner shrink-0">
           <div className="flex items-center gap-2 text-green-700 font-black">
             <ClockIcon size={18} className="animate-pulse" />
@@ -59,7 +59,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
           <NavItem icon={<BarChart2 size={18} />} label="বাগেরহাট ৪" active={activeTab === 'results'} onClick={() => setActiveTab('results')} />
           <NavItem icon={<ImageIcon size={18} />} label="এভাটার" active={activeTab === 'frame'} onClick={() => setActiveTab('frame')} />
           <NavItem icon={<UserPlus size={18} />} label="যোগ দিন" active={activeTab === 'join'} onClick={() => setActiveTab('join')} />
-          <NavItem icon={<HelpCircle size={18} />} label="গাইড" active={activeTab === 'guide'} onClick={() => setActiveTab('guide')} />
+          <NavItem icon={<Info size={18} />} label="গণভোট কি?" active={activeTab === 'guide'} onClick={() => setActiveTab('guide')} />
         </div>
       </div>
     </nav>
