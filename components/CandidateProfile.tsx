@@ -1,12 +1,13 @@
 
 import React from 'react';
-import { CANDIDATE, ALIM_IMAGES } from '../constants';
-import { GraduationCap, MapPin, Award, Heart, MessageSquare, Users } from 'lucide-react';
+import { CANDIDATE, ALIM_IMAGES, SUPPORTERS } from '../constants';
+import { GraduationCap, MapPin, Heart, MessageSquare, Users, ShieldCheck, Scale } from 'lucide-react';
 
 export const CandidateProfile: React.FC = () => {
   return (
     <section className="py-24 bg-[#fdfdfd] overflow-hidden">
       <div className="container mx-auto px-4">
+        {/* Main Header */}
         <div className="flex flex-col items-center mb-20 text-center">
           <span className="text-green-600 font-bold uppercase tracking-widest text-sm mb-4">আমাদের কাণ্ডারি</span>
           <h2 className="text-4xl md:text-6xl font-black text-gray-900 mb-6">প্রফেসর মোঃ আবদুল আলিম</h2>
@@ -14,6 +15,36 @@ export const CandidateProfile: React.FC = () => {
             <div className="w-16 h-2 bg-red-600 rounded-full"></div>
             <div className="w-8 h-2 bg-green-600 rounded-full"></div>
             <div className="w-4 h-2 bg-green-600 rounded-full"></div>
+          </div>
+        </div>
+
+        {/* Supporters / Alliance Leaders Section */}
+        <div className="mb-32">
+          <div className="text-center mb-16">
+            <h3 className="text-2xl md:text-4xl font-black text-gray-800 mb-4">ঐতিহ্যের আলোকবর্তিকা: আমাদের পথপ্রদর্শক</h3>
+            <p className="text-gray-500 font-medium max-w-2xl mx-auto">যাদের আদর্শ এবং পথচলা আমাদের জন্য অনুপ্রেরণা। তাদের দেখানো ইনসাফের পথেই আমরা এগিয়ে চলছি।</p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-5xl mx-auto">
+            {SUPPORTERS.map((leader, index) => (
+              <div key={index} className="bg-white p-6 rounded-[40px] shadow-2xl border border-gray-100 flex items-center gap-8 group hover:-translate-y-2 transition-all duration-500">
+                <div className="relative shrink-0">
+                  <div className="absolute -inset-2 bg-gradient-to-tr from-green-600 to-emerald-400 rounded-[30px] opacity-20 group-hover:opacity-40 blur transition-all"></div>
+                  <img 
+                    src={leader.image} 
+                    alt={leader.name} 
+                    className="relative w-32 h-32 md:w-40 md:h-40 rounded-[24px] object-cover shadow-xl border-4 border-white"
+                  />
+                </div>
+                <div>
+                  <h4 className="text-xl md:text-2xl font-black text-gray-900 mb-2">{leader.name}</h4>
+                  <p className="text-green-700 font-bold text-sm mb-4">{leader.title}</p>
+                  <div className="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-widest">
+                    <ShieldCheck size={14} className="text-blue-500" /> ভেরিফাইড লিডারশিপ
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
@@ -74,6 +105,15 @@ export const CandidateProfile: React.FC = () => {
               <MapPin size={48} className="text-green-500 group-hover:scale-110 transition-transform" />
             </div>
           </div>
+        </div>
+
+        {/* Call to Action Footer inside profile */}
+        <div className="mt-24 p-12 bg-green-50 rounded-[50px] border-2 border-dashed border-green-200 text-center">
+            <Scale size={48} className="mx-auto text-green-600 mb-6" />
+            <h4 className="text-3xl font-black text-green-900 mb-4">ঐক্যবদ্ধ শক্তিই আমাদের প্রেরণা</h4>
+            <p className="text-green-800/70 font-bold max-w-xl mx-auto leading-relaxed">
+              সৎ নেতৃত্ব এবং ইনসাফ কায়েমের লক্ষ্যে আমরা সকলে আজ একতাবদ্ধ। মোরেলগঞ্জ ও শরণখোলার মাটি ও মানুষের অধিকার আদায়ের লড়াইয়ে দাড়িপাল্লায় ভোট দিয়ে আমাদের শক্তিকে বেগবান করুন।
+            </p>
         </div>
       </div>
     </section>

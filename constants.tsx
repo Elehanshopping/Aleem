@@ -25,6 +25,19 @@ export const LOGOS = {
   DEER: "https://static.thenounproject.com/png/1183313-200.png" 
 };
 
+export const SUPPORTERS = [
+  {
+    name: "মাওলানা মতিউর রহমান নিজামী",
+    title: "সাবেক মন্ত্রী ও বর্ষীয়ান রাজনীতিবিদ",
+    image: "https://i.ibb.co.com/s9mLz0Zj/526986981-1133085225535496-1536184394491002098-n.jpg"
+  },
+  {
+    name: "মাওলানা দেলাওয়ার হোসাইন সাঈদী",
+    title: "সাবেক সংসদ সদস্য ও বিশ্বনন্দিত মুফাসসিরে কুরআন",
+    image: "https://i.ibb.co.com/jP27hSyf/629458615-919199897465844-4650439013684776058-n.jpg"
+  }
+];
+
 export const GONOVOTE_INFO = {
   yes: {
     title: "গণভোট দিলে কী হবে?",
