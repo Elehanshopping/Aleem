@@ -10,7 +10,7 @@ export const CandidateProfile: React.FC = () => {
         {/* Main Header */}
         <div className="flex flex-col items-center mb-20 text-center">
           <span className="text-green-600 font-bold uppercase tracking-widest text-sm mb-4">আমাদের কাণ্ডারি</span>
-          <h2 className="text-4xl md:text-6xl font-black text-gray-900 mb-6">প্রফেসর মোঃ আবদুল আলিম</h2>
+          <h2 className="text-4xl md:text-6xl font-black text-gray-900 mb-6">অধ্যক্ষ মোঃ আব্দুল আলীম</h2>
           <div className="flex gap-2">
             <div className="w-16 h-2 bg-red-600 rounded-full"></div>
             <div className="w-8 h-2 bg-green-600 rounded-full"></div>

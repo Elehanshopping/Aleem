@@ -1,6 +1,6 @@
 {
   "name": "Bagerhat-4 Election Management",
-  "description": "An advanced election management and profile frame generator for Professor Md. Abdul Alim (Bagerhat-4). Includes AI-powered slogan generation.",
+  "description": "An advanced election management and profile frame generator for Principal Md. Abdul Alim (Bagerhat-4). Includes AI-powered slogan generation.",
   "requestFramePermissions": [
     "camera"
   ]

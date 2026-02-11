@@ -300,7 +300,7 @@ export const FrameCreator: React.FC = () => {
       ctx.fillStyle = '#f42a41';
       ctx.font = 'bold 30px Hind Siliguri';
       ctx.textAlign = 'center';
-      ctx.fillText('প্রফেসর আলিম', x + badgeSize / 2, y + badgeSize + 45);
+      ctx.fillText('অধ্যক্ষ আলীম', x + badgeSize / 2, y + badgeSize + 45);
     };
   };
 
