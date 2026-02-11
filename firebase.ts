@@ -1,6 +1,6 @@
 
-import { initializeApp, getApp, getApps } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+import { initializeApp, getApp, getApps, FirebaseApp } from "firebase/app";
+import { getFirestore, Firestore } from "firebase/firestore";
 
 // Note: In a production environment, these should be handled via environment variables
 const firebaseConfig = {
@@ -12,16 +12,16 @@ const firebaseConfig = {
   appId: "1:123456789:web:abcdef"
 };
 
-// Singleton pattern for Firebase initialization
-const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+let db: Firestore | null = null;
 
-let dbInstance;
 try {
-  // We initialize the Firestore service using the standard SDK method
-  dbInstance = getFirestore(app);
+  const app: FirebaseApp = !getApps().length 
+    ? initializeApp(firebaseConfig) 
+    : getApp();
+    
+  db = getFirestore(app);
 } catch (error) {
-  console.error("Firestore initialization failed. Using a fallback.", error);
-  dbInstance = null; 
+  console.error("Firebase/Firestore could not be initialized:", error);
 }
 
-export const db = dbInstance;
+export { db };

@@ -39,7 +39,6 @@ export const ElectionBoard: React.FC = () => {
             name="সোমনাথ দে" 
             party="বি.এন.পি" 
             symbol="ধানের শীষ"
-            symbolImage={LOGOS.PADDY}
             votes={43500} 
             percentage={28} 
             color="bg-blue-600" 
@@ -79,7 +78,7 @@ const CandidateResult: React.FC<{
   name: string, 
   party: string, 
   symbol: string,
-  symbolImage: string,
+  symbolImage?: string,
   votes: number, 
   percentage: number, 
   color: string, 
@@ -89,11 +88,19 @@ const CandidateResult: React.FC<{
   <div className={`p-6 rounded-[32px] transition-all ${isPrimary ? 'bg-green-50/50 border-2 border-green-100 shadow-inner' : 'bg-white border border-gray-100'}`}>
     <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-6">
       <div className="flex items-center gap-5">
-        <div className="w-16 h-16 bg-white rounded-2xl shadow-md border border-gray-100 flex items-center justify-center p-2 relative">
-          <img src={symbolImage} alt={symbol} className={`w-full h-full object-contain ${percentage === 0 ? 'opacity-20 grayscale' : ''}`} />
-          {percentage === 0 && (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-full h-0.5 bg-red-500 rotate-45"></div>
+        <div className="w-16 h-16 bg-white rounded-2xl shadow-md border border-gray-100 flex items-center justify-center p-2 relative overflow-hidden">
+          {symbolImage ? (
+            <>
+              <img src={symbolImage} alt={symbol} className={`w-full h-full object-contain ${percentage === 0 ? 'opacity-20 grayscale' : ''}`} />
+              {percentage === 0 && (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-full h-0.5 bg-red-500 rotate-45"></div>
+                </div>
+              )}
+            </>
+          ) : (
+            <div className="w-full h-full bg-gray-50 flex items-center justify-center">
+              <span className="text-[10px] font-bold text-gray-300 uppercase text-center">No Image</span>
             </div>
           )}
         </div>
