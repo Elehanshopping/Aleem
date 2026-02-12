@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { FrameCreator } from './components/FrameCreator';
@@ -118,6 +119,7 @@ const App: React.FC = () => {
       </main>
 
       <Footer onPrivacyClick={() => setActiveTab('privacy')} />
+      <Analytics />
 
       <style>{`
         @keyframes marquee {
