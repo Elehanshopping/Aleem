@@ -1,6 +1,6 @@
 {
-  "name": "Bagerhat-4 Election Management",
-  "description": "An advanced election management and profile frame generator for Principal Md. Abdul Alim (Bagerhat-4). Includes AI-powered slogan generation.",
+  "name": "অধ্যক্ষ মোঃ আব্দুল আলীম - বাগেরহাট-৪ নির্বাচনী পোর্টাল",
+  "description": "অধ্যক্ষ মোঃ আব্দুল আলীম (বাগেরহাট-৪) এর অফিসিয়াল নির্বাচনী পোর্টাল। সময় নিউজ ভিত্তিক লাইভ নির্বাচনী ফলাফল, জাতীয় ফলাফল এবং প্রচারণার স্লোগান ও ফ্রেম জেনারেটর।",
   "requestFramePermissions": [
     "camera"
   ]

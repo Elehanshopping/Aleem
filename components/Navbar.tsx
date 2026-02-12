@@ -1,11 +1,11 @@
 
 import React, { useState, useEffect } from 'react';
-import { ImageIcon, Sparkles, UserPlus, Home, BarChart2, HelpCircle, ClipboardList, Clock as ClockIcon, Calendar, Info } from 'lucide-react';
+import { ImageIcon, Sparkles, UserPlus, Home, BarChart2, HelpCircle, ClipboardList, Clock as ClockIcon, Calendar, Info, Globe } from 'lucide-react';
 import { CANDIDATE, LOGOS } from '../constants';
 
 interface NavbarProps {
-  activeTab: 'home' | 'frame' | 'ai' | 'results' | 'survey' | 'volunteers' | 'guide' | 'join';
-  setActiveTab: (tab: 'home' | 'frame' | 'ai' | 'results' | 'survey' | 'volunteers' | 'guide' | 'join') => void;
+  activeTab: 'home' | 'frame' | 'ai' | 'results' | 'national' | 'volunteers' | 'guide' | 'join';
+  setActiveTab: (tab: 'home' | 'frame' | 'ai' | 'results' | 'national' | 'volunteers' | 'guide' | 'join') => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
@@ -41,7 +41,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
         </div>
 
         {/* Live Clock & Date */}
-        <div className="hidden md:flex items-center gap-6 px-6 py-2 bg-gray-50 rounded-2xl border border-gray-100 shadow-inner shrink-0">
+        <div className="hidden xl:flex items-center gap-6 px-6 py-2 bg-gray-50 rounded-2xl border border-gray-100 shadow-inner shrink-0">
           <div className="flex items-center gap-2 text-green-700 font-black">
             <ClockIcon size={18} className="animate-pulse" />
             <span className="text-sm tabular-nums">{formatTime(time)}</span>
@@ -55,11 +55,10 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
 
         <div className="flex items-center gap-1 md:gap-2 overflow-x-auto no-scrollbar py-2 shrink">
           <NavItem icon={<Home size={18} />} label="হোম" active={activeTab === 'home'} onClick={() => setActiveTab('home')} />
-          <NavItem icon={<ClipboardList size={18} />} label="জাতীয় ফল" active={activeTab === 'survey'} onClick={() => setActiveTab('survey')} />
+          <NavItem icon={<Globe size={18} />} label="জাতীয় ফল" active={activeTab === 'national'} onClick={() => setActiveTab('national')} />
           <NavItem icon={<BarChart2 size={18} />} label="বাগেরহাট ৪" active={activeTab === 'results'} onClick={() => setActiveTab('results')} />
-          <NavItem icon={<ImageIcon size={18} />} label="এভাটার" active={activeTab === 'frame'} onClick={() => setActiveTab('frame')} />
+          <NavItem icon={<ImageIcon size={18} />} label="পোস্টার" active={activeTab === 'frame'} onClick={() => setActiveTab('frame')} />
           <NavItem icon={<UserPlus size={18} />} label="যোগ দিন" active={activeTab === 'join'} onClick={() => setActiveTab('join')} />
-          <NavItem icon={<Info size={18} />} label="গণভোট কি?" active={activeTab === 'guide'} onClick={() => setActiveTab('guide')} />
         </div>
       </div>
     </nav>
