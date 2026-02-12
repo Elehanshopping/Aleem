@@ -24,7 +24,7 @@ export const LOGOS = {
   PARTY: "https://i.ibb.co.com/XfPPtcRz/Bangladesh-Jamaat-e-Islami-Logo.png",
   SCALE: "https://i.ibb.co.com/VWGs1s28/bangladesh-jamaat-e-islami-marka-daripalla-logo-png-seeklogo-623252.png",
   PADDY: "https://i.ibb.co.com/YH5cR50/images.png", // Verified BNP Logo from user source
-  DEER: "https://i.ibb.co.com/7S8S6X9/independent-logo.png" // Professional independent placeholder
+  DEER: "https://i.ibb.co.com/Mk6dz5RV/MV5-BZDM3-Y2-Rh-Nj-Ut-ZWJl-Ny00-Mj-Qy-LWJj-Yj-Qt-OGE0-ZTA1-Zm-Y3-NDZm-Xk-Ey-Xk-Fqc-Gc-V1.jpg" // Updated Independent/Others logo
 };
 
 // 300 Parliamentary Seats for Bangladesh
@@ -43,7 +43,7 @@ export const SUPPORTERS = [
   },
   {
     name: "ওয়ালিদ হাসান তাকসিদ",
-    title: "সদস্য: যুব-জামাত মোড়েলগঞ্জ উপজেলা শাখা",
+    title: "সদস্য: যুব-জামাত মোরেলগঞ্জ উপজেলা শাখা",
     contact: "01862109990",
     image: "https://i.ibb.co.com/s9mLz0Zj/526986981-1133085225535496-1536184394491002098-n.jpg"
   }
