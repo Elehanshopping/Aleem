@@ -60,8 +60,18 @@ export const Footer: React.FC<FooterProps> = ({ onPrivacyClick }) => {
             <div className="space-y-5">
               <div className="font-black text-green-500 text-xl tracking-tight">{DEVELOPER.company}</div>
               <div className="flex items-center gap-4 group">
-                <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center text-xs font-black text-gray-400 group-hover:bg-green-600 group-hover:text-white transition-colors">CEO</div>
-                <span className="text-gray-200 font-bold">{DEVELOPER.ceo}</span>
+                <div className="relative w-14 h-14 md:w-16 md:h-16 shrink-0">
+                  <div className="absolute inset-0 bg-green-600 rounded-2xl blur-md opacity-20 group-hover:opacity-40 transition-opacity"></div>
+                  <img 
+                    src={DEVELOPER.image} 
+                    alt={DEVELOPER.ceo} 
+                    className="relative w-full h-full object-cover rounded-2xl border-2 border-white/10 shadow-xl group-hover:scale-105 transition-transform"
+                  />
+                </div>
+                <div>
+                  <div className="text-[10px] font-black text-green-500 uppercase tracking-widest mb-1">CEO & Founder</div>
+                  <span className="text-gray-200 font-bold text-lg">{DEVELOPER.ceo}</span>
+                </div>
               </div>
               <FooterInfoItem icon={<Mail size={18} />} text={DEVELOPER.email || ''} />
               <FooterInfoItem icon={<MapPin size={18} />} text={DEVELOPER.office || ''} />

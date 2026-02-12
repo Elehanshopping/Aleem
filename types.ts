@@ -13,6 +13,7 @@ export interface DeveloperInfo {
   phone: string;
   email?: string;
   office?: string;
+  image?: string;
 }
 
 export interface FrameOption {

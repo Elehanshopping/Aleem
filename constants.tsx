@@ -14,7 +14,8 @@ export const DEVELOPER: DeveloperInfo = {
   ceo: "Walid Hasan Taksid",
   phone: "+8809649999143",
   email: "Walid@Taksid.com",
-  office: "Mohakhali, Dhaka"
+  office: "Mohakhali, Dhaka",
+  image: "https://i.ibb.co.com/WW3588H1/IMG-6857.jpg"
 };
 
 export const ELECTION_DATE = "2026-02-12T09:00:00+06:00";
