@@ -1,6 +1,7 @@
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { CANDIDATE, LOGOS } from '../constants';
-import { Award, ShieldCheck, CheckCircle, RotateCw, AlertCircle, TrendingUp, Loader2, Database, Globe, Lock, ExternalLink, Info, Newspaper, Clock, AlertTriangle, ShieldAlert, Fingerprint, Search, ShieldQuestion, Activity, CheckCircle2, ListFilter, Zap } from 'lucide-react';
+import { Award, ShieldCheck, CheckCircle, RotateCw, AlertCircle, TrendingUp, Loader2, Database, Globe, Lock, ExternalLink, Info, Newspaper, Clock, AlertTriangle, ShieldAlert, Fingerprint, Search, ShieldQuestion, Activity, CheckCircle2, ListFilter, Zap, BarChart3, Users, FileText, LayoutGrid } from 'lucide-react';
 import { GoogleGenAI, Type } from '@google/genai';
 import { ConstituencyVerification } from '../types';
 
@@ -11,6 +12,7 @@ export const ElectionBoard: React.FC = () => {
   const [isSyncing, setIsSyncing] = useState(false);
   const [data, setData] = useState<ConstituencyVerification | null>(null);
   const [newsBulletin, setNewsBulletin] = useState<string>('');
+  const [activeTab, setActiveTab] = useState<'summary' | 'centers'>('summary');
 
   const fetchRealTimeVerification = useCallback(async () => {
     setIsSyncing(true);
@@ -193,7 +195,6 @@ OUTPUT STRICT JSON ONLY:
       const parsedData = JSON.parse(response.text || '{}') as ConstituencyVerification;
       setData(parsedData);
 
-      // News bulletin logic
       const nPrompt = `বাগেরহাট-৪ আসনের বর্তমান অবস্থা নিয়ে একটি বাংলা সংবাদ বুলেটিন লিখুন। স্ট্যাটাস: ${parsedData.status}। বিজয়ী: ${parsedData.official_result.winner || 'অপেক্ষমান'}। সোর্স ভেরিফিকেশন লেভেল: ${parsedData.official_result.verification.level}।`;
       const nResponse = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
@@ -206,259 +207,235 @@ OUTPUT STRICT JSON ONLY:
     } finally {
       setLastUpdate(new Date());
       setIsSyncing(false);
+      setLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    const init = async () => {
-      await new Promise(r => setTimeout(r, 1000));
-      setLoading(false);
-      fetchRealTimeVerification();
-    };
-    init();
-
+    fetchRealTimeVerification();
     const countdownInterval = setInterval(() => {
       setNextSyncIn((prev) => {
-        if (prev <= 1) {
-          fetchRealTimeVerification();
-          return 900; 
-        }
+        if (prev <= 1) { fetchRealTimeVerification(); return 900; }
         return prev - 1;
       });
     }, 1000);
-
     return () => clearInterval(countdownInterval);
   }, [fetchRealTimeVerification]);
-
-  const formatCountdown = (seconds: number) => {
-    const m = Math.floor(seconds / 60);
-    const s = seconds % 60;
-    return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-  };
 
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center py-40">
         <Loader2 className="animate-spin text-green-600 mb-6" size={64} />
-        <h3 className="text-2xl font-black text-gray-900 tracking-tight text-center">Bagerhat-4 Live Engine <br/> সক্রিয় হচ্ছে...</h3>
-        <p className="text-gray-400 font-bold mt-2 flex items-center gap-2">
-          <Fingerprint size={16} className="text-blue-600" /> High-Integrity Protocol v2.5
-        </p>
+        <h3 className="text-2xl font-black text-gray-900 text-center">Bagerhat-4 Live Engine <br/> সক্রিয় হচ্ছে...</h3>
       </div>
     );
   }
 
+  const sortedCandidates = [...(data?.official_result?.candidates || [])].sort((a, b) => (b.votes || 0) - (a.votes || 0));
+  const totalVotes = sortedCandidates.reduce((acc, curr) => acc + (curr.votes || 0), 0);
+
   return (
-    <div className="space-y-8 md:space-y-12">
-      {/* Integrity & Engine Header */}
-      <div className="bg-white border-l-8 border-gray-950 p-6 md:p-10 rounded-[40px] shadow-2xl flex flex-col lg:flex-row items-center justify-between gap-8 overflow-hidden relative">
-        <div className="flex items-center gap-6">
-          <div className="bg-gray-950 text-white p-5 rounded-[28px] shadow-xl">
-            <Activity size={40} className={isSyncing ? 'animate-spin' : ''} />
-          </div>
-          <div>
-            <h4 className="text-2xl md:text-3xl font-black text-gray-900 leading-tight">বাগেরহাট-৪ নির্বাচনী ইঞ্জিন</h4>
-            <div className="flex flex-wrap gap-2 mt-3">
-               <IntegrityBadge active={data?.integrity?.ecs_final_authority} label="ECS Authority" />
-               <IntegrityBadge active={data?.integrity?.auto_publish_only_verified} label="Verified Only" />
-               <IntegrityBadge active={data?.integrity?.no_hallucination} label="Hallucination Protected" />
+    <div className="space-y-8 md:space-y-12 pb-20">
+      {/* Somoy Style Header */}
+      <div className="bg-white border-b-8 border-green-600 p-6 md:p-10 rounded-[32px] md:rounded-[48px] shadow-2xl flex flex-col lg:flex-row items-center justify-between gap-8 relative overflow-hidden">
+         <div className="absolute top-0 right-0 p-4">
+           <div className="flex items-center gap-2">
+             <span className="w-3 h-3 rounded-full bg-green-500 animate-ping"></span>
+             <span className="text-[10px] font-black text-green-600 uppercase tracking-widest">Bagerhat-4 Official Live</span>
+           </div>
+         </div>
+         <div className="flex items-center gap-6">
+            <div className="bg-green-600 text-white p-5 rounded-[28px] shadow-xl">
+               <Activity size={40} className={isSyncing ? 'animate-spin' : ''} />
             </div>
-          </div>
-        </div>
-        
-        <div className="flex items-center gap-4 bg-gray-50 p-5 rounded-[32px] border border-gray-100 w-full lg:w-auto shadow-inner">
-          <div className="text-right flex-grow lg:flex-none">
-            <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Auto-Verification Sync</div>
-            <div className="text-2xl font-black text-blue-600 tabular-nums mt-1">{formatCountdown(nextSyncIn)}</div>
-          </div>
-          <button 
-            onClick={() => { setNextSyncIn(900); fetchRealTimeVerification(); }}
-            disabled={isSyncing}
-            className="p-4 bg-white text-green-600 hover:shadow-lg rounded-2xl transition-all border border-gray-100"
-          >
-            <RotateCw size={28} className={isSyncing ? 'animate-spin' : ''} />
-          </button>
+            <div>
+              <h2 className="text-2xl md:text-5xl font-black text-gray-900 tracking-tighter uppercase">Constituency Result Report</h2>
+              <div className="flex flex-wrap gap-2 mt-3">
+                 <IntegrityBadge active={data?.integrity?.ecs_final_authority} label="ECS Authority" />
+                 <IntegrityBadge active={data?.integrity?.no_hallucination} label="Integrity Locked" />
+              </div>
+            </div>
+         </div>
+         <div className="flex items-center gap-6 bg-gray-50 p-6 rounded-[32px] border border-gray-100">
+            <div className="text-right">
+               <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Next Sync In</div>
+               <div className="text-3xl font-black text-blue-600 tabular-nums">{Math.floor(nextSyncIn/60)}:{(nextSyncIn%60).toString().padStart(2,'0')}</div>
+            </div>
+            <button onClick={() => { setNextSyncIn(900); fetchRealTimeVerification(); }} className="p-5 bg-white text-green-600 rounded-2xl border border-gray-100 shadow-sm"><RotateCw size={32} className={isSyncing ? 'animate-spin' : ''}/></button>
+         </div>
+      </div>
+
+      {/* Main Stats */}
+      <div className="bg-gray-950 text-white rounded-[50px] md:rounded-[70px] p-8 md:p-16 relative overflow-hidden shadow-4xl border border-white/5">
+         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-green-500/10 rounded-full -mr-80 -mt-80 blur-[120px]"></div>
+         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div className="space-y-8">
+               <div className="inline-flex items-center gap-3 px-6 py-2 bg-green-600 rounded-full text-white font-black text-xs md:text-sm uppercase tracking-widest shadow-xl">
+                  <TrendingUp size={20} /> লাইভ ভোট টালি
+               </div>
+               <h3 className="text-5xl md:text-8xl font-black tracking-tighter leading-[0.9]">বাগেরহাট-৪ <br/> <span className="text-green-400">অফিসিয়াল</span></h3>
+               <div className="grid grid-cols-2 gap-6">
+                  <div className="bg-white/5 border border-white/10 p-6 rounded-3xl backdrop-blur-xl">
+                     <div className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Total Votes</div>
+                     <div className="text-3xl font-black text-white tabular-nums">{totalVotes.toLocaleString('bn-BD')}</div>
+                  </div>
+                  <div className="bg-white/5 border border-white/10 p-6 rounded-3xl backdrop-blur-xl">
+                     <div className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Turnout</div>
+                     <div className="text-3xl font-black text-green-400">{data?.official_result.turnout || '0%'}</div>
+                  </div>
+               </div>
+            </div>
+            <div className="space-y-4">
+               {sortedCandidates.map((cand, idx) => {
+                 const pct = totalVotes > 0 ? Math.round((cand.votes! / totalVotes) * 100) : 0;
+                 return (
+                   <div key={idx} className={`p-6 md:p-8 rounded-[36px] border transition-all ${idx === 0 ? 'bg-white text-gray-950 border-white' : 'bg-white/5 border-white/10 text-white'}`}>
+                      <div className="flex justify-between items-center mb-4">
+                         <div className="flex items-center gap-4">
+                            <div className={`w-12 h-12 rounded-xl flex items-center justify-center p-2 ${idx === 0 ? 'bg-green-600 text-white' : 'bg-white/10'}`}>
+                               <img src={cand.party?.includes('জামায়াতে') ? LOGOS.SCALE : LOGOS.PADDY} className={`w-full h-full object-contain ${idx === 0 ? 'invert brightness-0' : ''}`} alt="Party" />
+                            </div>
+                            <div>
+                               <div className="text-lg font-black leading-tight">{cand.name}</div>
+                               <div className={`text-[9px] font-bold uppercase tracking-widest ${idx === 0 ? 'text-green-700' : 'text-gray-500'}`}>{cand.party}</div>
+                            </div>
+                         </div>
+                         <div className="text-right">
+                            <div className="text-2xl font-black tabular-nums">{cand.votes?.toLocaleString('bn-BD')}</div>
+                            <div className="text-[10px] font-bold uppercase tracking-widest opacity-40">{pct}% ভোট</div>
+                         </div>
+                      </div>
+                      <div className={`h-2 rounded-full overflow-hidden ${idx === 0 ? 'bg-gray-100' : 'bg-white/10'}`}>
+                         <div className={`h-full rounded-full transition-all duration-1000 ${idx === 0 ? 'bg-green-600' : 'bg-green-400/40'}`} style={{ width: `${pct}%` }}></div>
+                      </div>
+                   </div>
+                 );
+               })}
+            </div>
+         </div>
+      </div>
+
+      {/* Tabs */}
+      <div className="flex justify-center">
+        <div className="bg-gray-100 p-2 rounded-[32px] flex gap-2">
+          <TabBtn active={activeTab === 'summary'} onClick={() => setActiveTab('summary')} icon={<LayoutGrid size={20}/>} label="Summary" />
+          <TabBtn active={activeTab === 'centers'} onClick={() => setActiveTab('centers')} icon={<FileText size={20}/>} label="Center Report" />
         </div>
       </div>
 
-      {/* Ingestion Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
-         <IngestionCard label="Received" value={data?.ingestion_summary.received || 0} color="gray" />
-         <IngestionCard label="Rejected" value={data?.ingestion_summary.rejected_spam_or_invalid || 0} color="red" />
-         <IngestionCard label="Pending" value={data?.ingestion_summary.accepted_pending || 0} color="amber" />
-         <IngestionCard label="Official" value={data?.ingestion_summary.accepted_verified_official || 0} color="green" />
-      </div>
+      {activeTab === 'summary' ? (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+           <div className="lg:col-span-8 space-y-8">
+              <div className="bg-white p-10 md:p-16 rounded-[48px] shadow-3xl border border-gray-100 relative overflow-hidden">
+                <div className="flex items-center gap-4 mb-8 border-b border-gray-50 pb-8">
+                  <div className="p-3 bg-red-100 text-red-600 rounded-2xl"><Newspaper size={32} /></div>
+                  <div>
+                    <h5 className="text-3xl font-black text-gray-900">ইঞ্জিন আপডেট রিপোর্ট</h5>
+                    <p className="text-gray-400 font-bold text-xs uppercase tracking-widest">Real-time Verified Bulletin</p>
+                  </div>
+                </div>
+                <p className="text-gray-700 text-xl font-medium leading-relaxed italic border-l-4 border-red-500 pl-8">{newsBulletin}</p>
+              </div>
 
-      {/* Official News Update */}
-      {newsBulletin && (
-        <div className="bg-white p-10 md:p-16 rounded-[48px] shadow-3xl border border-gray-100 relative overflow-hidden group">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-red-500/5 rounded-full -mr-16 -mt-16 blur-3xl"></div>
-          <div className="flex items-center gap-4 mb-8">
-            <div className="p-3 bg-red-100 text-red-600 rounded-2xl">
-              <Newspaper size={32} />
-            </div>
-            <h5 className="text-3xl font-black text-gray-900">ইঞ্জিন বুলেটিন</h5>
-          </div>
-          <p className="text-gray-700 text-xl font-medium leading-relaxed italic border-l-4 border-red-500 pl-8">
-            {newsBulletin}
-          </p>
+              <div className="bg-white p-10 md:p-14 rounded-[48px] shadow-xl border border-gray-100">
+                <h3 className="text-2xl font-black text-gray-900 flex items-center gap-3 mb-10"><BarChart3 className="text-green-600" /> ডাটা ইন্টিগ্রিটি ম্যাট্রিক্স</h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                  <StatItem label="Received" value={data?.ingestion_summary.received} color="gray" />
+                  <StatItem label="Rejected" value={data?.ingestion_summary.rejected_spam_or_invalid} color="red" />
+                  <StatItem label="Pending" value={data?.ingestion_summary.accepted_pending} color="amber" />
+                  <StatItem label="Official" value={data?.ingestion_summary.accepted_verified_official} color="green" />
+                </div>
+              </div>
+           </div>
+           <div className="lg:col-span-4 bg-gray-950 text-white p-10 rounded-[48px] shadow-4xl overflow-hidden relative">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/10 rounded-full -mr-16 -mt-16 blur-2xl"></div>
+              <h3 className="text-2xl font-black mb-8 flex items-center gap-3"><ShieldQuestion className="text-amber-500" /> ভেরিফিকেশন কিউ</h3>
+              <div className="space-y-4 max-h-[500px] overflow-y-auto no-scrollbar">
+                {data?.pending_items.map((item, i) => (
+                  <div key={i} className="p-5 bg-white/5 rounded-2xl border border-white/10">
+                    <div className="text-[9px] font-black text-amber-500 uppercase mb-1">{item.source_type}</div>
+                    <p className="text-xs font-bold text-gray-300 leading-tight">"{item.extracted_summary}"</p>
+                  </div>
+                ))}
+              </div>
+           </div>
+        </div>
+      ) : (
+        <div className="bg-white rounded-[48px] shadow-3xl border border-gray-100 overflow-hidden">
+           <div className="p-10 border-b border-gray-50 flex justify-between items-center">
+              <h3 className="text-3xl font-black text-gray-900">কেন্দ্র ভিত্তিক রিপোর্ট</h3>
+              <span className="text-xs font-black text-green-600 bg-green-50 px-4 py-1 rounded-full">{data?.polling_centers_verified.length} Confirmed</span>
+           </div>
+           <div className="overflow-x-auto">
+             <table className="w-full">
+               <thead className="bg-gray-50">
+                 <tr>
+                    <th className="px-10 py-6 text-left text-[10px] font-black text-gray-400 uppercase tracking-widest">কেন্দ্রের নাম</th>
+                    <th className="px-10 py-6 text-left text-[10px] font-black text-gray-400 uppercase tracking-widest">বিজয়ী</th>
+                    <th className="px-10 py-6 text-center text-[10px] font-black text-gray-400 uppercase tracking-widest">মোট ভোট</th>
+                    <th className="px-10 py-6 text-right text-[10px] font-black text-gray-400 uppercase tracking-widest">স্ট্যাটাস</th>
+                 </tr>
+               </thead>
+               <tbody className="divide-y divide-gray-50">
+                  {data?.polling_centers_verified.map((center, i) => (
+                    <tr key={i} className="hover:bg-green-50/40 transition-all">
+                      <td className="px-10 py-6">
+                        <div className="font-black text-gray-900">{center.center_name}</div>
+                        <div className="text-[10px] font-bold text-gray-400">ID: {center.center_code}</div>
+                      </td>
+                      <td className="px-10 py-6 font-bold text-gray-600">দাঁড়িপাল্লা (Jamaat)</td>
+                      <td className="px-10 py-6 text-center font-black text-lg tabular-nums">{center.total_votes_cast?.toLocaleString('bn-BD')}</td>
+                      <td className="px-10 py-6 text-right">
+                        <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-[9px] font-black uppercase border border-green-200">Verified</span>
+                      </td>
+                    </tr>
+                  ))}
+               </tbody>
+             </table>
+           </div>
         </div>
       )}
 
-      {/* Detailed Verification Dashboard */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12">
-        <div className="lg:col-span-8 space-y-12">
-           {/* Official Result Card */}
-           <div className={`p-10 md:p-16 rounded-[56px] border-4 transition-all overflow-hidden relative shadow-4xl ${
-             data?.status === 'official' ? 'bg-green-50/50 border-green-200' : 'bg-white border-gray-100 grayscale-[0.5]'
-           }`}>
-              <div className="absolute top-0 right-0 p-8">
-                {data?.status === 'official' ? (
-                  <div className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest shadow-lg">
-                    <CheckCircle2 size={16} /> ECS Official
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-2 bg-amber-500 text-white px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest shadow-lg">
-                    <Clock size={16} /> Pending Verification
-                  </div>
-                )}
-              </div>
-
-              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-16">
-                 <div>
-                    <h5 className="text-gray-400 font-black uppercase tracking-[0.2em] text-[10px] mb-3">CONSTITUENCY STATUS</h5>
-                    <h3 className="text-4xl md:text-6xl font-black text-gray-900">{data?.constituency}</h3>
-                    <div className="mt-4 flex gap-4 text-sm font-bold text-gray-500">
-                      <span>Margin: {data?.official_result.vote_margin || '0'}</span>
-                      <span>Turnout: {data?.official_result.turnout || '0%'}</span>
-                    </div>
-                 </div>
-                 <div className="bg-white p-6 rounded-3xl shadow-xl border border-gray-100 min-w-[200px] text-center">
-                    <div className="text-[10px] font-black text-gray-400 uppercase mb-2">Confidence Level</div>
-                    <div className="text-4xl font-black text-green-600">{data?.official_result.verification.confidence}</div>
-                 </div>
-              </div>
-
-              <div className="space-y-8">
-                 {data?.official_result.candidates.map((cand, i) => (
-                   <div key={i} className="bg-white p-8 rounded-[36px] border border-gray-100 flex items-center justify-between group hover:border-green-300 transition-all">
-                      <div className="flex items-center gap-6">
-                        <div className="w-16 h-16 bg-gray-50 rounded-2xl p-2 shadow-inner border border-gray-100">
-                           <img src={cand.party?.includes('জামায়াতে') ? LOGOS.SCALE : LOGOS.PADDY} className="w-full h-full object-contain" alt="Party" />
-                        </div>
-                        <div>
-                           <div className="text-2xl font-black text-gray-900">{cand.name}</div>
-                           <div className="text-xs font-bold text-gray-500 uppercase tracking-widest">{cand.party}</div>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                         <div className="text-4xl font-black tabular-nums">{cand.votes?.toLocaleString('bn-BD')}</div>
-                         <div className="text-[10px] font-black text-gray-400 uppercase">Verified Votes</div>
-                      </div>
-                   </div>
-                 ))}
-              </div>
-
-              {data?.official_result.verification.ecs_proof_url && (
-                <a 
-                  href={data.official_result.verification.ecs_proof_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-12 w-full py-6 bg-gray-950 text-white rounded-[32px] font-black flex items-center justify-center gap-4 hover:bg-gray-800 transition-all shadow-xl"
-                >
-                  <ExternalLink size={24} /> View ECS Official Proof ({data.official_result.verification.ecs_proof_type})
-                </a>
-              )}
-           </div>
-        </div>
-
-        <div className="lg:col-span-4 space-y-8">
-           {/* Pending Items Queue */}
-           <div className="bg-gray-950 text-white p-10 rounded-[48px] shadow-3xl relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/10 rounded-full -mr-16 -mt-16 blur-2xl"></div>
-              <div className="flex items-center gap-3 mb-8">
-                <ShieldQuestion className="text-amber-500" size={32} />
-                <h3 className="text-2xl font-black">পেন্ডিং আইটেম কিউ</h3>
-              </div>
-              <div className="space-y-5 max-h-[600px] overflow-y-auto no-scrollbar">
-                 {data?.pending_items.map((item, idx) => (
-                   <div key={idx} className="p-6 bg-white/5 rounded-3xl border border-white/10 group hover:bg-white/10 transition-all">
-                      <div className="flex justify-between items-start mb-3">
-                         <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest">{item.source_type}</span>
-                         <span className="bg-amber-500/20 text-amber-500 px-2 py-0.5 rounded text-[8px] font-black uppercase">Holding</span>
-                      </div>
-                      <p className="text-sm font-bold text-gray-200 mb-4 leading-relaxed line-clamp-2">"{item.extracted_summary}"</p>
-                      <div className="flex items-center justify-between gap-4">
-                        <div className="text-[9px] font-bold text-red-400 uppercase flex items-center gap-1">
-                          <AlertCircle size={10} /> {item.reason}
-                        </div>
-                        <a href={item.source_url} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-400 hover:underline">Source</a>
-                      </div>
-                   </div>
-                 ))}
-                 {!data?.pending_items.length && (
-                   <div className="text-center py-12 text-gray-600 font-bold italic">No pending items found.</div>
-                 )}
-              </div>
-           </div>
-
-           {/* Polling Centers Verified */}
-           <div className="bg-white p-10 rounded-[48px] shadow-xl border border-gray-100">
-              <div className="flex items-center gap-3 mb-8">
-                <CheckCircle2 className="text-green-600" size={32} />
-                <h3 className="text-2xl font-black text-gray-900">ভেরিফাইড কেন্দ্র</h3>
-              </div>
-              <div className="space-y-4">
-                 {data?.polling_centers_verified.map((center, idx) => (
-                   <div key={idx} className="p-5 bg-green-50/50 rounded-2xl border border-green-100 flex items-center justify-between">
-                      <div>
-                        <div className="font-black text-gray-900 text-sm">{center.center_name}</div>
-                        <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">ID: {center.center_code}</div>
-                      </div>
-                      <div className="text-right">
-                        <div className="text-lg font-black text-green-700">{center.total_votes_cast?.toLocaleString('bn-BD')}</div>
-                        <div className="text-[8px] font-black text-gray-400 uppercase tracking-widest">Confirmed</div>
-                      </div>
-                   </div>
-                 ))}
-                 {!data?.polling_centers_verified.length && (
-                   <div className="text-center py-8 text-gray-400 font-bold italic">No centers verified yet.</div>
-                 )}
-              </div>
-           </div>
-        </div>
-      </div>
-
-      <div className="bg-amber-50 p-10 md:p-16 rounded-[60px] border-2 border-dashed border-amber-200 text-center max-w-5xl mx-auto shadow-inner">
+      {/* Security Disclaimer */}
+      <div className="bg-amber-50 p-12 md:p-16 rounded-[60px] border-2 border-dashed border-amber-200 text-center max-w-5xl mx-auto shadow-inner">
          <ShieldAlert className="mx-auto text-amber-600 mb-6" size={48} />
-         <h4 className="text-3xl font-black text-amber-900 mb-6">Engine Security Protocol</h4>
-         <p className="text-xl text-amber-800/80 font-medium leading-relaxed max-w-3xl mx-auto">
-           বাগেরহাট-৪ আসনের প্রতিটি ডেটা পয়েন্ট স্বয়ংক্রিয়ভাবে ECS এর ডাটাবেসের সাথে মেলানো হয়। মিডিয়া থেকে আসা তথ্য "PENDING" অবস্থায় রাখা হয় যতক্ষণ না তা অফিসিয়াল গেজেট বা পোর্টালে প্রকাশিত হয়। কোনো প্রকার অনিয়ম বা অমিল ধরা পড়লে তা স্বয়ংক্রিয়ভাবে রিজেক্ট করা হয়।
+         <h4 className="text-3xl font-black text-amber-900 mb-4">Security Protocol Report</h4>
+         <p className="text-lg text-amber-800/80 font-medium leading-relaxed max-w-3xl mx-auto">
+           বাগেরহাট-৪ আসনের প্রতিটি ডাটা পয়েন্ট স্বয়ংক্রিয়ভাবে ECS সার্ভারের সাথে মেলানো হয়। মিডিয়া থেকে আসা তথ্য "PENDING" অবস্থায় রাখা হয় যতক্ষণ না তা অফিসিয়াল গেজেটে প্রকাশিত হয়।
          </p>
       </div>
     </div>
   );
 };
 
-const IntegrityBadge = ({ active, label }: { active: boolean | undefined, label: string }) => (
-  <span className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest border transition-all ${
+const IntegrityBadge = ({ active, label }: any) => (
+  <span className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest border transition-all ${
     active ? 'bg-green-50 border-green-200 text-green-700' : 'bg-red-50 border-red-200 text-red-700'
   }`}>
     <ShieldCheck size={12} className={active ? 'text-green-600' : 'text-red-400'} /> {label}
   </span>
 );
 
-const IngestionCard = ({ label, value, color }: { label: string, value: number, color: 'green' | 'red' | 'amber' | 'gray' }) => {
+const TabBtn = ({ active, onClick, icon, label }: any) => (
+  <button 
+    onClick={onClick}
+    className={`px-8 py-4 rounded-[28px] font-black text-sm flex items-center gap-3 transition-all ${active ? 'bg-green-600 text-white shadow-2xl scale-105' : 'text-gray-500 hover:text-gray-900'}`}
+  >
+    {icon} {label}
+  </button>
+);
+
+const StatItem = ({ label, value, color }: any) => {
   const colors = {
-    green: 'bg-green-600 border-green-800 text-white',
-    red: 'bg-red-600 border-red-800 text-white',
-    amber: 'bg-amber-500 border-amber-700 text-white',
-    gray: 'bg-gray-100 border-gray-200 text-gray-900'
+    green: 'bg-green-600 text-white',
+    red: 'bg-red-600 text-white',
+    amber: 'bg-amber-500 text-white',
+    gray: 'bg-gray-100 text-gray-900'
   };
   return (
-    <div className={`p-6 rounded-[32px] border-b-8 shadow-xl transition-transform hover:-translate-y-1 ${colors[color]}`}>
-       <div className={`text-[10px] font-black uppercase tracking-widest mb-1 ${color === 'gray' ? 'text-gray-400' : 'text-white/70'}`}>{label}</div>
-       <div className="text-3xl font-black tabular-nums">{value.toLocaleString('bn-BD')}</div>
+    <div className={`p-6 rounded-[24px] border border-gray-100 shadow-sm ${colors[color]}`}>
+       <div className="text-[10px] font-black uppercase tracking-widest opacity-60 mb-1">{label}</div>
+       <div className="text-2xl font-black tabular-nums">{(value || 0).toLocaleString('bn-BD')}</div>
     </div>
   );
 };
